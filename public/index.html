@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__NAME__ — rehearse the one-shot submission</title>
+<meta name="description" content="__TAGLINE__ Every check can leave a receipt on NEAR testnet.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body data-contract="__CONTRACT__" data-rpc="__RPC__" data-deploy="__DEPLOY_TX__" data-explorer="__EXPLORER__">
+<header>
+  <a class="logo" href="#check"><span class="mark"></span>dryrun</a>
+  <span class="slash">/</span>
+  <div class="crumb">near-hackathon <span class="pill">rules v2026-11</span></div>
+  <div class="grow"></div>
+  <span class="pill"><span class="dot"></span>testnet · __CONTRACT__</span>
+  <a class="btn" href="__REPO__#readme">Docs</a>
+  <a class="btn pri" href="#check" id="run-top">Run a check</a>
+</header>
+<nav class="tabs" aria-label="Sections">
+  <a href="#check" data-go="check" class="on">Free check</a>
+  <a href="#rank" data-go="rank">Where do I rank</a>
+  <a href="#idea" data-go="idea">Idea check</a>
+  <a href="#field" data-go="field">The field</a>
+  <a href="#deep" data-go="deep">Deep review</a>
+  <a href="/verify">Verify</a>
+  <a href="#organizers" data-go="organizers">Organizer triage</a>
+</nav>
+<main>
+  <div class="banner stand" id="api-banner" hidden>
+    <span class="tag">NO API</span>
+    <span id="api-banner-text"></span>
+    <button class="btn" id="api-retry" type="button">Wake / retry</button>
+  </div>
+  <div data-view="check">
+    <div class="head">
+      <div>
+        <h1>Rehearse the one-shot submission.</h1>
+        <p class="sub">Run the published rules against your repo before you press submit. Every check leaves a receipt on NEAR testnet that a judge can read back later.</p>
+      </div>
+      <div class="grow"></div>
+      <span class="pill">One attempt per project · fixes go through /request-changes</span>
+    </div>
+    <div class="grid">
+      <section class="card span-7" id="check-card">
+        <div class="ch"><h3>Free check</h3><span class="k">deterministic · no AI · no account</span><div class="grow"></div><span class="pill" id="recorded-pill" hidden>recorded</span><span class="pill">checker __CHECKER__</span></div>
+        <div class="banner" id="recorded-flag" hidden><span class="tag">RECORDED</span><span id="recorded-flag-text"></span></div>
+        <form id="form">
+          <div class="cb">
+            <div class="inrow">
+              <label class="input" for="repo"><span class="gh">github.com/</span><input id="repo" name="repo" required placeholder="owner/repo" autocomplete="off" spellcheck="false"></label>
+              <button class="btn pri" id="go" type="submit">Check</button>
+            </div>
+            <details class="more">
+              <summary>Also check submission fields</summary>
+              <div class="field">
+                <label for="projectName">Project name</label><input id="projectName" maxlength="200">
+                <label for="nearAddress">NEAR account</label><input id="nearAddress" placeholder="you.near">
+                <div class="tracks" id="tracks"></div>
+                <label for="idea">Description</label><textarea id="idea" rows="3"></textarea>
+                <label for="demoText">Draft X post</label><textarea id="demoText" rows="3"></textarea>
+                <label for="demoUrl">Demo post URL</label><input id="demoUrl" type="url">
+                <label for="siteUrl">Live site URL</label><input id="siteUrl" type="url">
+              </div>
+            </details>
+            <p class="err" id="err" role="alert" hidden></p>
+            <div id="score-block" hidden>
+              <div class="score">
+                <div class="ring" id="ring"><b id="score">—</b></div>
+                <div>
+                  <div class="score-copy" id="counts">Run a check to see the real result.</div>
+                  <div class="score-meta" id="score-meta"></div>
+                </div>
+              </div>
+              <div class="rules" id="rules"></div>
+              <div id="extra"></div>
+            </div>
+            <p class="muted" id="check-empty" style="margin-top:16px">No check yet. The pass, warning, and failure lines appear from the repository you submit.</p>
+          </div>
+          <div class="strip" id="receipt-strip"><span class="dot"></span><span id="receipt-line">Receipt is written when the testnet signer is set.</span><div class="grow"></div><a id="receipt-link" href="/verify" hidden>open /verify →</a></div>
+        </form>
+      </section>
+
+      <section class="card span-5" id="verify-card">
+        <div class="ch"><h3 id="verify-title">/verify</h3><span class="k">read from rpc.testnet.near.org</span><div class="grow"></div><span class="pill" id="verify-kind">kind: —</span></div>
+        <div class="cb" id="verify-body">
+          <p class="muted">Reading the contract…</p>
+        </div>
+      </section>
+
+      <section class="card span-8" id="board-card">
+        <div class="ch">
+          <h3>The field</h3><span class="k">estimated rank among scored repos</span>
+          <div class="grow"></div>
+          <button class="toggle" id="field-names" type="button"><span class="sw" id="names-sw"></span>Show team names</button>
+        </div>
+        <div class="banner" id="board-banner"><span class="tag">ESTIMATE</span><span id="board-banner-text">Not the official result · team and repo names anonymised</span></div>
+        <table>
+          <thead><tr><th>#</th><th>Team</th><th>Repo</th><th>Tracks</th><th>Score</th><th>Match</th></tr></thead>
+          <tbody id="board-body"></tbody>
+        </table>
+      </section>
+
+      <section class="card span-4" id="deep-card">
+        <div class="ch"><h3>Deep review</h3><span class="k">priced via NEAR Intents</span></div>
+        <div class="cb">
+          <div class="muted" style="font-size:12.5px">$<span id="price">__PRICE__</span> review · 1Click quote, <span class="mono" style="color:var(--tx)">dry: true</span></div>
+          <div class="quote"><span class="big" id="quote-amt">—</span><span class="mono muted" id="quote-unit">USDC</span></div>
+          <div class="chain" id="chains"></div>
+          <label class="muted" for="refund" style="font-size:12px">Refund address <span class="mono">(prices the route, not charged)</span></label>
+          <input id="refund" placeholder="0x… or account on that chain" autocomplete="off" style="margin-top:6px">
+          <div class="note" id="note-deposit" hidden>◇ <span><b>No deposit address returned.</b> Nothing to fund.</span></div>
+          <div class="note" id="note-ai">◇ <span id="ai-note">NEAR AI model <b>not called</b> until a key is set</span></div>
+          <button class="btn" id="quote" type="button" style="width:100%;margin-top:8px">Get a dry quote</button>
+          <p class="err" id="perr" role="alert" hidden></p>
+          <div class="tx" id="quote-tx"></div>
+          <div id="review"></div>
+        </div>
+      </section>
+    </div>
+    <div class="stats">
+      <div><b id="stat-receipts">…</b><span>receipt_count</span></div>
+      <div><b>74 + 6</b><span>app + contract tests</span></div>
+      <div><b>0</b><span>funds moved</span></div>
+      <div><b>2</b><span>tracks · open, business</span></div>
+    </div>
+  </div>
+
+  <div data-view="rank" hidden>
+    <div class="head"><div><h1>Where do I rank.</h1><p class="sub">Estimate only. The rank is among scored public repos, not the whole directory, and it is not an official result.</p></div></div>
+    <div class="grid">
+      <form id="rank-form" class="card span-5"><div class="cb field">
+        <label for="rank-repo">Public GitHub repository</label>
+        <input id="rank-repo" required placeholder="https://github.com/you/project">
+        <label for="rank-site">Live site <span class="mono">(optional)</span></label>
+        <input id="rank-site" type="url" placeholder="https://your-project.app">
+        <label>Tracks</label>
+        <div class="tracks" id="rank-tracks"></div>
+        <button class="btn pri" id="rank-go" type="submit">Score and place me</button>
+        <p class="err" id="rank-err" hidden></p>
+      </div></form>
+      <div class="card span-7"><div class="cb" id="rank-out"><p class="muted">Your content score and estimated rank appear here.</p></div></div>
+    </div>
+  </div>
+
+  <div data-view="idea" hidden>
+    <div class="head"><div><h1>Say it in a sentence.</h1><p class="sub">Matched on rare words in public names and demo posts. Generic words barely count.</p></div></div>
+    <div class="grid">
+      <form id="idea-form" class="card span-5"><div class="cb field">
+        <label for="idea-text">Your idea</label>
+        <textarea id="idea-text" required maxlength="2000" rows="5" placeholder="A spending limit for AI agents that pay invoices on NEAR"></textarea>
+        <button class="btn pri" id="idea-go" type="submit">Check the field</button>
+        <p class="err" id="idea-err" hidden></p>
+      </div></form>
+      <div class="card span-7"><div class="cb" id="idea-out"><p class="muted">Closest public entries appear here.</p></div></div>
+    </div>
+  </div>
+
+  <div data-view="field" hidden>
+    <div class="head"><div><h1>The field, as far as public pages go.</h1><p class="sub" id="field-banner">Estimate only. Not an official ranking. Team and repository names are anonymised.</p></div></div>
+    <p class="muted" id="field-scan"></p>
+    <p class="muted" id="field-coverage" style="margin:8px 0 16px"></p>
+    <div class="card" style="margin-bottom:16px"><div class="ch"><h3>Tracks</h3></div><div class="cb" id="field-tracks" style="overflow:auto"></div></div>
+    <div class="card" style="margin-bottom:16px"><div class="ch"><h3>Name clusters</h3><span class="k">public directory names, not the guessed board</span></div><div class="cb" id="field-clusters"></div></div>
+    <div class="card">
+      <div class="ch"><h3>Estimate</h3><div class="grow"></div>
+        <label class="muted" for="field-q">Search</label>
+        <input id="field-q" placeholder="Alias" style="max-width:220px">
+        <select id="field-track"><option value="">All scored</option></select>
+      </div>
+      <div style="overflow:auto"><table><thead><tr><th>#</th><th>Team</th><th>Tracks</th><th>Score</th><th>Fails</th><th>Match</th><th>Repo</th></tr></thead><tbody id="field-body"></tbody></table></div>
+      <div class="cb"><p class="muted" id="field-count"></p><button class="btn" id="field-more" type="button" hidden>Show more</button></div>
+    </div>
+    <div id="field-growth" hidden></div>
+  </div>
+
+  <div data-view="organizers" hidden>
+    <div class="head"><div><h1>A triage queue.</h1><p class="sub">Paste up to 20 public repository URLs. Each one is cloned, read, and deleted. This is the same rule list as the free check.</p></div></div>
+    <div class="grid">
+      <form id="org-form" class="card span-5"><div class="cb field">
+        <label for="org-text">Repository URLs</label>
+        <textarea id="org-text" required rows="8" placeholder="https://github.com/owner/repo"></textarea>
+        <button class="btn pri" id="org-go" type="submit">Build the queue</button>
+        <p class="err" id="org-err" hidden></p>
+      </div></form>
+      <div class="card span-7"><div class="cb" id="org-out" style="overflow:auto"><p class="muted">The queue appears here.</p></div></div>
+    </div>
+  </div>
+</main>
+<footer>
+  <span>dryrun · independent hackathon project</span>
+  <a id="deploy-link" href="__EXPLORER__">deploy <span id="deploy-short">__DEPLOY_TX__</span></a>
+  <div class="grow"></div>
+  <span>testnet · __CONTRACT__</span>
+</footer>
+<script src="/app.js"></script>
+</body>
+</html>

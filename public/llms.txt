@@ -1,0 +1,28 @@
+# __NAME__
+
+> __TAGLINE__ A live intelligence tool for NEAR HACKATHON (Nov 2026): it reads the public project directory, scores public repositories on their content, and ranks them on a speculative board. __DISCLAIMER__
+
+Site: __URL__
+Source: __REPO__ (MIT)
+
+## What it does
+- Free check: clones a public GitHub repo, reads it (never executes it), and scores the content: README substance, real code vs scaffolding, NEAR used in code, tests with real assertions, commit spread, and a demo link that opens. File presence and rule hygiene are 10 of 100 points.
+- Where do I rank: your content score placed against the entries scored so far. When the server has a NEAR AI Cloud key, an AI judge also scores the repo against the hackathon's criteria and cites file paths and lines.
+- Idea check: BM25 similarity over the directory's names and demo posts, with generic words down-weighted and a model re-rank. Track crowding is counted from similar entries. Includes a startup lens inspired by Garry Tan's published questions (not an endorsement).
+- AI readiness audit: checks a project's live site for AI crawler access, readable HTML, structured data, llms.txt and sitemap, metadata, and trust signals.
+- Organizer triage: up to 20 repositories per run, ordered by what fails first.
+
+## Pricing
+- Free: every check above.
+- Deep review: $__PRICE__ per repository, priced with a NEAR Intents 1Click dry quote (dry: true). No deposit address is issued and no funds move. Confirming the quote writes it to a NEAR testnet receipt. A model on NEAR AI Cloud checks README claims only when NEAR_AI_API_KEY is set. Without that key the model is not called.
+- Larger organizer runs: coming soon.
+
+## Live
+- Site: __URL__
+- API: __API__
+- The API is a Render free web service. It sleeps after about 15 minutes without a request. A browser on the static site can read it only after the service sends Access-Control-Allow-Origin for that site. Until the API answers, the page shows a recorded check of near-examples/rust-status-message (score 55) and labels it recorded. The on-chain receipt is https://explorer.testnet.near.org/transactions/4dBZ5SxvdfrLLP3W8ZQodWxFcpbLRaGKdS5gCJ85XEw4
+- Verify reads the testnet contract in the browser: __URL__/verify?id=1
+
+## Links
+- [About and source](__REPO__#readme)
+- [Contact (GitHub issues)](__REPO__/issues)
